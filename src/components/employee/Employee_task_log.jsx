@@ -277,7 +277,7 @@ const Employee_task_log = () => {
     },
   ];
   return (
-    <div className="p-5 pt-0 border rounded-lg    overflow-x-scroll w-[98%] max-h-[600px] overflow-y-scroll relative">
+    <div className="p-5 pt-0 border rounded-lg    overflow-x-scroll w-full  relative">
       <div className="sticky top-0 z-50 ">
         <div className="pt-5 bg-white flex justify-between items-center">
           <h1 className=" text-xl ">Task Log</h1>
@@ -293,63 +293,67 @@ const Employee_task_log = () => {
             </button>
           </div>
         </div>
+      </div>
 
-        <div className="grid grid-cols-[120px_1fr_200px_100px] min-w-[600px] text-sm text-gray-500  bg-white py-5 ">
+      <div className="max-h-[500px] overflow-y-scroll relative">
+        <div className="grid grid-cols-[120px_1fr_200px_100px] min-w-[600px] text-sm text-gray-500  bg-white py-5  sticky top-0  z-50">
           <div>Date</div>
           <div>Task</div>
           <div>Project</div>
           <div>Remarks</div>
         </div>
-      </div>
-
-      {DailyTask?.map((data, index) => {
-        return (
-          <div
-            key={index}
-            className="grid grid-cols-[120px_1fr_200px_100px] min-w-[600px] py-5 border-b text-sm"
-          >
-            <div className="">{data?.date}</div>
-            <div className="">
-              {data?.task_list?.map((tasks, taskIndex) => {
-                return (
-                  <div
-                    key={taskIndex}
-                    className="flex gap-2 justify-start items-start mb-5"
-                  >
-                    <div className="w-[10px] flex justify-center items-start translate-y-1">
-                      <div
-                        style={{ backgroundColor: tasks?.color }}
-                        className="w-[8px] h-[8px] rounded-full"
-                      ></div>
-                    </div>
-
-                    <h3 className="">{tasks?.task}</h3>
-                  </div>
-                );
-              })}
-            </div>
-            <div className="  ">
-              {data?.projects?.map((projectName, projectIndex) => {
-                return (
-                  <div key={projectIndex} className="inline-block mr-2 mb-2  ">
-                    <h2
-                      style={{
-                        backgroundColor: projectName?.bgColor,
-                        color: projectName?.color,
-                      }}
-                      className={`  p-2 rounded-lg  `}
+        {DailyTask?.map((data, index) => {
+          return (
+            <div
+              key={index}
+              className="grid grid-cols-[120px_1fr_200px_100px] min-w-[600px] py-5 border-b text-sm"
+            >
+              <div className="">{data?.date}</div>
+              <div className="">
+                {data?.task_list?.map((tasks, taskIndex) => {
+                  return (
+                    <div
+                      key={taskIndex}
+                      className="flex gap-2 justify-start items-start mb-5"
                     >
-                      {projectName?.project}
-                    </h2>
-                  </div>
-                );
-              })}
-            </div>
+                      <div className="w-[10px] flex justify-center items-start translate-y-1">
+                        <div
+                          style={{ backgroundColor: tasks?.color }}
+                          className="w-[8px] h-[8px] rounded-full"
+                        ></div>
+                      </div>
 
-            <div className="">{data?.remarks}</div>
-          </div>
-        );
-      })}
+                      <h3 className="">{tasks?.task}</h3>
+                    </div>
+                  );
+                })}
+              </div>
+              <div className="  ">
+                {data?.projects?.map((projectName, projectIndex) => {
+                  return (
+                    <div
+                      key={projectIndex}
+                      className="inline-block mr-2 mb-2  "
+                    >
+                      <h2
+                        style={{
+                          backgroundColor: projectName?.bgColor,
+                          color: projectName?.color,
+                        }}
+                        className={`  p-2 rounded-lg  `}
+                      >
+                        {projectName?.project}
+                      </h2>
+                    </div>
+                  );
+                })}
+              </div>
+
+              <div className="">{data?.remarks}</div>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 };

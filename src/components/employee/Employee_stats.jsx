@@ -3,7 +3,7 @@ import React from "react";
 const Employee_stats = (props) => {
   return (
     <div>
-      <div className="p-5 border rounded-lg">
+      <div className="p-3 sm:p-5 border rounded-lg">
         <h2 className="text-center text-xl ">{props?.statsData?.heading}</h2>
         <h1 className="text-center  mt-2 text-[#5f66e1]">
           <span className="text-3xl font-medium ">

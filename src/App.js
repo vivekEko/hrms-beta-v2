@@ -2,7 +2,7 @@ import EmployeeDashboardPage from "./pages/employee/EmployeeDashboardPage";
 
 function App() {
   return (
-    <div>
+    <div className="cursor-default">
       <EmployeeDashboardPage />
     </div>
   );
