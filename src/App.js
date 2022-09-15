@@ -1,16 +1,22 @@
 // Routing
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+// State menagement(Recoil JS)
+import { useRecoilState } from "recoil";
+import userAtom from "./recoil/auth/userAtom";
 // Components and pages
 import AdminDashboardPage from "./pages/admin/AdminDashboardPage";
 import EmployeeDashboardPage from "./pages/employee/EmployeeDashboardPage";
 import Login from "./pages/auth/Login";
 import ProtectedRoutes from "./utils/routing/ProtectedRoutes";
+import userLoginResponseAtom from "./recoil/auth/userLoginResponseAtom";
 
 function App() {
-  let auth = {
-    token: false,
-    isAdmin: false,
-  };
+  // Global variables
+  const [user, setUser] = useRecoilState(userAtom);
+  const [userLoginResponse, setUserLoginResponseAtom] = useRecoilState(
+    userLoginResponseAtom
+  );
+
   return (
     <div className="cursor-default">
       <Router>
@@ -19,7 +25,7 @@ function App() {
             <Route
               path="*"
               element={
-                auth?.isAdmin ? (
+                userLoginResponse?.isAdmin ? (
                   <AdminDashboardPage />
                 ) : (
                   <EmployeeDashboardPage />
@@ -29,7 +35,7 @@ function App() {
             <Route
               path="/"
               element={
-                auth?.isAdmin ? (
+                userLoginResponse?.isAdmin ? (
                   <AdminDashboardPage />
                 ) : (
                   <EmployeeDashboardPage />

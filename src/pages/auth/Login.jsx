@@ -1,22 +1,57 @@
 // react
 import React, { useEffect, useRef, useState } from "react";
+// State Management (Recoil JS)
+import { useRecoilState } from "recoil";
+import userAtom from "../../recoil/auth/userAtom";
 
-// media assets
-// import logo from "../../assets/logo/eko_logo.svg";
+// Assets
 import logo from "../../assets/logo/Group.svg";
 import VisibilityRoundedIcon from "@mui/icons-material/VisibilityRounded";
 import VisibilityOffRoundedIcon from "@mui/icons-material/VisibilityOffRounded";
+import UseLoginApiCall from "../../utils/apiCalls/login/UseLoginApiCall";
+import axios from "axios";
+import userLoginResponseAtom from "../../recoil/auth/userLoginResponseAtom";
+
 const Login = () => {
+  // Global variables
+  const [userCredentials, setUserCredentials] = useRecoilState(userAtom);
+  const [userLoginResponse, setUserLoginResponseAtom] = useRecoilState(
+    userLoginResponseAtom
+  );
+
   // Local variables
   const [showPassword, setShowPassword] = useState(false);
-  const [userCredentials, setUserCredentials] = useState();
+  const [callLoginApi, setCallLoginApi] = useState(false);
   const emailRef = useRef();
   const passwordRef = useRef();
+
+  useEffect(() => {
+    console.log("userLoginResponse:");
+    console.log(userLoginResponse);
+  }, [userLoginResponse]);
 
   //   Testing
   useEffect(() => {
     console.log("userCredentials");
     console.log(userCredentials);
+
+    axios({
+      method: "post",
+      url: process.env.REACT_APP_BASE_LINK + "/login",
+      data: userCredentials,
+    })
+      .then(function (response) {
+        // setUserCredentials({ ...userCredentials, response: response?.data });
+        setUserLoginResponseAtom({
+          isAdmin: response?.data?.user_type === "S" ? true : false,
+          emp_id: response?.data?.emp_id,
+          message: response?.data?.message,
+          token: response?.data?.token,
+        });
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   }, [userCredentials]);
 
   return (
@@ -32,7 +67,7 @@ const Login = () => {
             e.preventDefault();
             // Storing user credentials
             setUserCredentials({
-              email: emailRef.current.value,
+              username: emailRef.current.value,
               password: passwordRef.current.value,
             });
             // Clearling input fileds after form submission
