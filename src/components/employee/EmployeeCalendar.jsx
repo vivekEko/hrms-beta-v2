@@ -2,13 +2,13 @@
 import React, { useEffect, useState } from "react";
 
 // helper functions/variables
-import { dayList } from "../../helper/calendar/day_and_month_list";
-import { monthList } from "../../helper/calendar/day_and_month_list";
+import { dayList } from "../../utils/calendar/day_and_month_list";
+import { monthList } from "../../utils/calendar/day_and_month_list";
 
 // Media files
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 
-const Employee_calendar = () => {
+const EmployeeCalendar = () => {
   // Local variables
   const [currentSelectedYear, setCurrentSelectedYear] = useState(
     new Date().getFullYear()
@@ -42,6 +42,8 @@ const Employee_calendar = () => {
   const getLastDate = (year, month) => {
     return new Date(year, month + 1, 0).getDate();
   };
+
+  // test date according to inputs
 
   useEffect(() => {
     getFirstDay(currentSelectedYear, currentSelectedMonth);
@@ -217,4 +219,4 @@ const Employee_calendar = () => {
   );
 };
 
-export default Employee_calendar;
+export default EmployeeCalendar;

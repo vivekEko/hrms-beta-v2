@@ -1,8 +1,9 @@
 // react
 import React from "react";
+// Media Assets
 import PowerSettingsNewRoundedIcon from "@mui/icons-material/PowerSettingsNewRounded";
 
-const Employee_header = () => {
+const EmployeeHeader = () => {
   return (
     <div>
       <div className=" flex justify-between items-center ">
@@ -24,4 +25,4 @@ const Employee_header = () => {
   );
 };
 
-export default Employee_header;
+export default EmployeeHeader;

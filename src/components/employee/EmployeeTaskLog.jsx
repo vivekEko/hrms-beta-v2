@@ -5,7 +5,7 @@ import React from "react";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import BorderColorRoundedIcon from "@mui/icons-material/BorderColorRounded";
 
-const Employee_task_log = () => {
+const EmployeeTaskLog = () => {
   const DailyTask = [
     {
       date: "01 Sept 2022",
@@ -277,7 +277,7 @@ const Employee_task_log = () => {
     },
   ];
   return (
-    <div className="p-5 pt-0 border rounded-lg    overflow-x-scroll w-full  relative">
+    <div className="p-5 pt-0 border rounded-lg    overflow-x-scroll w-full 2xl:w-[98%] relative">
       <div className="sticky top-0 z-50 ">
         <div className="pt-5 bg-white flex justify-between items-center">
           <h1 className=" text-xl ">Task Log</h1>
@@ -358,4 +358,4 @@ const Employee_task_log = () => {
   );
 };
 
-export default Employee_task_log;
+export default EmployeeTaskLog;

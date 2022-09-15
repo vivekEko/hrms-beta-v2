@@ -1,6 +1,7 @@
+//react
 import React from "react";
 
-const Employee_stats = (props) => {
+const EmployeeStats = (props) => {
   return (
     <div>
       <div className="p-3 sm:p-5 border rounded-lg">
@@ -42,4 +43,4 @@ const Employee_stats = (props) => {
   );
 };
 
-export default Employee_stats;
+export default EmployeeStats;

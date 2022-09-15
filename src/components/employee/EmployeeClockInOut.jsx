@@ -1,6 +1,7 @@
+// React
 import React, { useState } from "react";
 
-const Employee_ClockInOut = () => {
+const EmployeeClockInOut = () => {
   //   local variables
   const [clockInTime, setClockInTime] = useState();
   const [clockOutTime, setClockOutTime] = useState();
@@ -77,4 +78,4 @@ const Employee_ClockInOut = () => {
   );
 };
 
-export default Employee_ClockInOut;
+export default EmployeeClockInOut;

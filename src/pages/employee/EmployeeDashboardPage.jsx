@@ -1,14 +1,14 @@
 // react
 import React from "react";
-import EmployeeEvents from "../../components/employee/EmployeeEvents";
-import Employee_calendar from "../../components/employee/Employee_calendar";
 
-// Component
-import Employee_ClockInOut from "../../components/employee/Employee_ClockInOut";
-import Employee_header from "../../components/employee/Employee_header";
-import Employee_leave_history from "../../components/employee/Employee_leave_history";
-import Employee_stats from "../../components/employee/Employee_stats.jsx";
-import Employee_task_log from "../../components/employee/Employee_task_log";
+// Components
+import EmployeeClockInOut from "../../components/employee/EmployeeClockInOut";
+import EmployeeHeader from "../../components/employee/EmployeeHeader";
+import EmployeeLeaveHistory from "../../components/employee/EmployeeLeaveHistory";
+import EmployeeStats from "../../components/employee/EmployeeStats.jsx";
+import EmployeeTaskLog from "../../components/employee/EmployeeTaskLog";
+import EmployeeEvents from "../../components/employee/EmployeeEvents";
+import EmployeeCalendar from "../../components/employee/EmployeeCalendar";
 
 const EmployeeDashboardPage = () => {
   const stats_data = [
@@ -79,22 +79,22 @@ const EmployeeDashboardPage = () => {
 
   return (
     <div className="w-[80%] sm:w-[85%] mx-auto py-5">
-      <Employee_header />
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 my-10">
-        <Employee_stats statsData={stats_data[0]} />
-        <Employee_stats statsData={stats_data[1]} />
-        <Employee_stats statsData={stats_data[2]} />
-        <Employee_ClockInOut />
+      <EmployeeHeader />
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 my-10 xl:my-5">
+        <EmployeeStats statsData={stats_data[0]} />
+        <EmployeeStats statsData={stats_data[1]} />
+        <EmployeeStats statsData={stats_data[2]} />
+        <EmployeeClockInOut />
       </div>
       <div className="flex flex-col 2xl:flex-row gap-10 2xl:gap-5 justify-between mb-10">
-        <Employee_task_log />
+        <EmployeeTaskLog />
 
         <div className="w-full flex flex-col md:flex-row gap-10 2xl:gap-5 ">
-          <Employee_leave_history />
+          <EmployeeLeaveHistory />
 
           {/* calendar */}
           <div className=" w-full rounded-lg flex flex-col gap-10 2xl:gap-5">
-            <Employee_calendar />
+            <EmployeeCalendar />
             <EmployeeEvents />
           </div>
         </div>

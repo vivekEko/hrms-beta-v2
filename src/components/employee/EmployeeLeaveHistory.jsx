@@ -5,7 +5,7 @@ import React from "react";
 import KeyboardArrowRightRoundedIcon from "@mui/icons-material/KeyboardArrowRightRounded";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 
-const Employee_leave_history = () => {
+const EmployeeLeaveHistory = () => {
   const leave_data = [
     {
       time_period: "Half Day Application",
@@ -135,7 +135,7 @@ const Employee_leave_history = () => {
     },
   ];
   return (
-    <div className="border w-full rounded-lg p-5 pt-0 relative overflow-y-scroll max-h-[600px] ">
+    <div className="border w-full 2xl:w-[96%] rounded-lg p-5 pt-0 relative overflow-y-scroll max-h-[600px] ">
       <div className=" text-xl pt-5 pb-2 bg-white sticky top-0 flex justify-between items-center">
         <h1>Leaves</h1>
         <button className="w-[40px] flex justify-center items-center aspect-square rounded-lg bg-[#5f66e1]">
@@ -195,4 +195,4 @@ const Employee_leave_history = () => {
   );
 };
 
-export default Employee_leave_history;
+export default EmployeeLeaveHistory;
