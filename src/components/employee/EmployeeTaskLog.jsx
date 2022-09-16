@@ -277,7 +277,7 @@ const EmployeeTaskLog = () => {
     },
   ];
   return (
-    <div className="p-5 pt-0 border rounded-lg    overflow-x-scroll w-full 2xl:w-[98%] relative">
+    <div className="p-5 pt-0  rounded-lg    overflow-x-scroll w-full 2xl:w-[98%] relative bg-white">
       <div className="sticky top-0 z-50 ">
         <div className="pt-5 bg-white flex justify-between items-center">
           <h1 className=" text-xl ">Task Log</h1>

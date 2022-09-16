@@ -1,5 +1,5 @@
 // react
-import React from "react";
+import React, { useEffect } from "react";
 
 // Components
 import EmployeeClockInOut from "../../components/employee/EmployeeClockInOut";
@@ -9,8 +9,14 @@ import EmployeeStats from "../../components/employee/EmployeeStats.jsx";
 import EmployeeTaskLog from "../../components/employee/EmployeeTaskLog";
 import EmployeeEvents from "../../components/employee/EmployeeEvents";
 import EmployeeCalendar from "../../components/employee/EmployeeCalendar";
+// Api call
+import axios from "axios";
+import { useRecoilState } from "recoil";
+import userInfoAtom from "../../recoil/auth/userInfoAtom";
 
 const EmployeeDashboardPage = () => {
+  // Global variables
+  const [userInfo, setUserInfo] = useRecoilState(userInfoAtom);
   const stats_data = [
     // Leaves
 
@@ -77,8 +83,20 @@ const EmployeeDashboardPage = () => {
     },
   ];
 
+  useEffect(async () => {
+    const leaveData = await axios({
+      method: "post",
+      url: process.env.REACT_APP_BASE_LINK + "/leaves",
+      data: {
+        emp_id: localStorage.getItem("emp_id"),
+      },
+    });
+
+    console.log(leaveData);
+  }, []);
+
   return (
-    <div className="w-[80%] sm:w-[85%] mx-auto py-5">
+    <div className="w-[80%] sm:w-[85%] mx-auto py-5 ">
       <EmployeeHeader />
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 my-10 xl:my-5">
         <EmployeeStats statsData={stats_data[0]} />

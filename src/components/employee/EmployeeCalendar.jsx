@@ -87,7 +87,7 @@ const EmployeeCalendar = () => {
   }, [currentSelectedYear, currentSelectedMonth]);
 
   return (
-    <div className=" w-full p-5 border  rounded-lg">
+    <div className=" w-full p-5  bg-white  rounded-lg">
       <div className="flex justify-between  items-center  gap-1 text-xl">
         <h1 className=" relative">
           <span

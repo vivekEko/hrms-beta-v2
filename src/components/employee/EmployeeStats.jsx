@@ -3,8 +3,8 @@ import React from "react";
 
 const EmployeeStats = (props) => {
   return (
-    <div>
-      <div className="p-3 sm:p-5 border rounded-lg">
+    <div className="">
+      <div className="p-3 sm:p-5  rounded-lg bg-white">
         <h2 className="text-center text-xl ">{props?.statsData?.heading}</h2>
         <h1 className="text-center  mt-2 text-[#5f66e1]">
           <span className="text-3xl font-medium ">

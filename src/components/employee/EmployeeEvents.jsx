@@ -57,7 +57,7 @@ const EmployeeEvents = () => {
   ];
 
   return (
-    <div className="h-full pt-5 w-full border  rounded-lg">
+    <div className="h-full pt-5 w-full  bg-white rounded-lg">
       <div className="flex justify-between items-end px-5 pb-3">
         <h1 className="text-xl  ">Events</h1>
 

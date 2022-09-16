@@ -9,9 +9,14 @@ import "./index.css";
 // Components
 import App from "./App";
 
+// Routing
+import { BrowserRouter as Router } from "react-router-dom";
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <RecoilRoot>
-    <App />
+    <Router>
+      <App />
+    </Router>
   </RecoilRoot>
 );

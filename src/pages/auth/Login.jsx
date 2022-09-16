@@ -3,55 +3,49 @@ import React, { useEffect, useRef, useState } from "react";
 // State Management (Recoil JS)
 import { useRecoilState } from "recoil";
 import userAtom from "../../recoil/auth/userAtom";
+import userLoginResponseAtom from "../../recoil/auth/userLoginResponseAtom";
 
 // Assets
-import logo from "../../assets/logo/Group.svg";
+import logo from "../../assets/logo/eko_logo.svg";
 import VisibilityRoundedIcon from "@mui/icons-material/VisibilityRounded";
 import VisibilityOffRoundedIcon from "@mui/icons-material/VisibilityOffRounded";
-import UseLoginApiCall from "../../utils/apiCalls/login/UseLoginApiCall";
+
+// NPM packages
 import axios from "axios";
-import userLoginResponseAtom from "../../recoil/auth/userLoginResponseAtom";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   // Global variables
   const [userCredentials, setUserCredentials] = useRecoilState(userAtom);
-  const [userLoginResponse, setUserLoginResponseAtom] = useRecoilState(
-    userLoginResponseAtom
-  );
 
   // Local variables
   const [showPassword, setShowPassword] = useState(false);
-  const [callLoginApi, setCallLoginApi] = useState(false);
   const emailRef = useRef();
   const passwordRef = useRef();
+  const navigate = useNavigate();
 
+  //   Login functionality
   useEffect(() => {
-    console.log("userLoginResponse:");
-    console.log(userLoginResponse);
-  }, [userLoginResponse]);
-
-  //   Testing
-  useEffect(() => {
-    console.log("userCredentials");
-    console.log(userCredentials);
-
-    axios({
-      method: "post",
-      url: process.env.REACT_APP_BASE_LINK + "/login",
-      data: userCredentials,
-    })
-      .then(function (response) {
-        // setUserCredentials({ ...userCredentials, response: response?.data });
-        setUserLoginResponseAtom({
-          isAdmin: response?.data?.user_type === "S" ? true : false,
-          emp_id: response?.data?.emp_id,
-          message: response?.data?.message,
-          token: response?.data?.token,
-        });
+    if (
+      emailRef?.current?.value?.length > 0 &&
+      passwordRef?.current?.value?.length > 0
+    ) {
+      axios({
+        method: "post",
+        url: process.env.REACT_APP_BASE_LINK + "/login",
+        data: userCredentials,
       })
-      .catch(function (error) {
-        console.log(error);
-      });
+        .then(function (response) {
+          localStorage.setItem("status", response?.data?.status);
+          localStorage.setItem("user_type", response?.data?.user_type);
+          localStorage.setItem("token", response?.data?.token);
+          localStorage.setItem("emp_id", response?.data?.emp_id);
+          navigate("/");
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    }
   }, [userCredentials]);
 
   return (
@@ -71,7 +65,7 @@ const Login = () => {
               password: passwordRef.current.value,
             });
             // Clearling input fileds after form submission
-            e.target.reset();
+            // e.target.reset();
           }}
           className="mt-10"
         >

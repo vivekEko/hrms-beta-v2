@@ -38,7 +38,7 @@ const EmployeeClockInOut = () => {
     }
   };
   return (
-    <div className="p-5 border rounded-lg">
+    <div className="p-5  rounded-lg bg-white">
       <h1 className=" text-xl ">
         <span>{month[d.getMonth()]}</span>
         <span className="ml-1">{d.getDate()}</span>
