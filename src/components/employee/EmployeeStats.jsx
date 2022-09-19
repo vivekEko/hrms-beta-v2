@@ -27,9 +27,9 @@ const EmployeeStats = (props) => {
                     </span>
                   )}
 
-                  {data?.sub_unit && (
+                  {data?.sub_unit && props?.statsData?.heading !== "Leaves" && (
                     <span>
-                      <span className="ml-1">{data?.sub_unit}</span>
+                      <span className="ml-1  text-xs">{data?.sub_unit}</span>
                     </span>
                   )}
                 </h3>

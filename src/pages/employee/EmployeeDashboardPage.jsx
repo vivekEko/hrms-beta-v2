@@ -1,5 +1,13 @@
-// react
+// React
 import React, { useEffect } from "react";
+
+// State Management (Recoil JS)
+import { useRecoilState } from "recoil";
+import userInfoAtom from "../../recoil/auth/userInfoAtom";
+import employeeApiDataAtom from "../../recoil/employeeDashboard/employeeApiDataAtom";
+
+// Api call
+import axios from "axios";
 
 // Components
 import EmployeeClockInOut from "../../components/employee/EmployeeClockInOut";
@@ -9,14 +17,13 @@ import EmployeeStats from "../../components/employee/EmployeeStats.jsx";
 import EmployeeTaskLog from "../../components/employee/EmployeeTaskLog";
 import EmployeeEvents from "../../components/employee/EmployeeEvents";
 import EmployeeCalendar from "../../components/employee/EmployeeCalendar";
-// Api call
-import axios from "axios";
-import { useRecoilState } from "recoil";
-import userInfoAtom from "../../recoil/auth/userInfoAtom";
 
 const EmployeeDashboardPage = () => {
   // Global variables
   const [userInfo, setUserInfo] = useRecoilState(userInfoAtom);
+  const [employeeApiData, setEmployeeApiData] =
+    useRecoilState(employeeApiDataAtom);
+
   const stats_data = [
     // Leaves
 
@@ -83,25 +90,57 @@ const EmployeeDashboardPage = () => {
     },
   ];
 
-  useEffect(async () => {
-    const leaveData = await axios({
-      method: "post",
-      url: process.env.REACT_APP_BASE_LINK + "/leaves",
-      data: {
-        emp_id: localStorage.getItem("emp_id"),
-      },
-    });
+  useEffect(() => {
+    async function apiCall() {
+      const leaveApiResponse = await axios({
+        method: "post",
+        url: process.env.REACT_APP_BASE_LINK + "/leaves",
+        data: {
+          emp_id: localStorage.getItem("emp_id"),
+        },
+      });
 
-    console.log(leaveData);
+      const onDeskApiResponse = await axios({
+        method: "post",
+        url: process.env.REACT_APP_BASE_LINK + "/onDesk",
+        data: {
+          emp_id: localStorage.getItem("emp_id"),
+        },
+      });
+
+      const overtimeResponse = await axios({
+        method: "post",
+        url: process.env.REACT_APP_BASE_LINK + "/overtime",
+        data: {
+          emp_id: localStorage.getItem("emp_id"),
+        },
+      });
+
+      setEmployeeApiData({
+        ...employeeApiData,
+        leaveApiResponse: leaveApiResponse?.data?.leave_stats,
+        onDeskStats: onDeskApiResponse?.data?.on_desk,
+        overtimeStats: overtimeResponse?.data?.overtime,
+      });
+    }
+
+    apiCall();
   }, []);
+
+  useEffect(() => {
+    console.log("employeeApiData:");
+    console.log(employeeApiData);
+  }, [employeeApiData]);
 
   return (
     <div className="w-[80%] sm:w-[85%] mx-auto py-5 ">
       <EmployeeHeader />
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 my-10 xl:my-5">
-        <EmployeeStats statsData={stats_data[0]} />
-        <EmployeeStats statsData={stats_data[1]} />
-        <EmployeeStats statsData={stats_data[2]} />
+        <EmployeeStats
+          statsData={employeeApiData?.leaveApiResponse?.leave_data[0]}
+        />
+        <EmployeeStats statsData={employeeApiData?.onDeskStats} />
+        <EmployeeStats statsData={employeeApiData?.overtimeStats} />
         <EmployeeClockInOut />
       </div>
       <div className="flex flex-col 2xl:flex-row gap-10 2xl:gap-5 justify-between mb-10">
