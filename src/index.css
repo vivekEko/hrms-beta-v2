@@ -30,3 +30,18 @@ html {
 ::-webkit-scrollbar-thumb:hover {
   background: #5f66e1;
 }
+
+/* Skeleton animation */
+.skeleton-animation {
+  animation: skeleton-loading 1.5s ease infinite;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    left: 0;
+  }
+
+  100% {
+    left: 100%;
+  }
+}

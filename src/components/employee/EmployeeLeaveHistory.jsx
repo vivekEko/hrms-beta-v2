@@ -135,61 +135,63 @@ const EmployeeLeaveHistory = () => {
     },
   ];
   return (
-    <div className=" w-full 2xl:w-[96%] rounded-lg p-5 pt-0 relative overflow-y-scroll max-h-[600px] bg-white ">
-      <div className=" text-xl pt-5 pb-2 bg-white sticky top-0 flex justify-between items-center">
-        <h1>Leaves</h1>
-        <button className="w-[40px] flex justify-center items-center aspect-square rounded-lg bg-[#5f66e1]">
-          <AddRoundedIcon className="text-white" />
-        </button>
-      </div>
+    <div className="  w-full 2xl:w-[96%]  overflow-hidden rounded-lg">
+      <div className=" w-full 2xl:w-[96%]  p-5 pt-0 relative overflow-y-scroll max-h-[600px] bg-white ">
+        <div className=" text-xl pt-5 pb-2 bg-white sticky top-0 flex justify-between items-center">
+          <h1>Leaves</h1>
+          <button className="w-[40px] flex justify-center items-center aspect-square rounded-lg bg-[#5f66e1]">
+            <AddRoundedIcon className="text-white" />
+          </button>
+        </div>
 
-      <div className="mt-5 ">
-        {leave_data?.map((data, index) => {
-          return (
-            <div key={index} className="mb-5  pb-5 border-b">
-              <div className="flex justify-between items-center">
-                <h3 className="text-gray-500 text-xs">{data?.time_period}</h3>
+        <div className="mt-5 ">
+          {leave_data?.map((data, index) => {
+            return (
+              <div key={index} className="mb-5  pb-5 border-b">
+                <div className="flex justify-between items-center">
+                  <h3 className="text-gray-500 text-xs">{data?.time_period}</h3>
 
-                <h2
-                  className="text-xs sm:text-sm p-[2px] rounded-lg  text-center w-[70px] sm:w-[90px]"
-                  style={{
-                    color: data?.status_color,
-                    backgroundColor: data?.status_bg_color,
-                  }}
-                >
-                  {data?.status}
-                </h2>
-              </div>
-              <div>
-                <h1 className="text-xl font-semibold">
-                  <span>{data?.start_day}</span>
-                  <span className="mx-1">{data?.start_date}</span>
-                  <span>{data?.start_month}</span>
+                  <h2
+                    className="text-xs sm:text-sm p-[2px] rounded-lg  text-center w-[70px] sm:w-[90px]"
+                    style={{
+                      color: data?.status_color,
+                      backgroundColor: data?.status_bg_color,
+                    }}
+                  >
+                    {data?.status}
+                  </h2>
+                </div>
+                <div>
+                  <h1 className="text-xl font-semibold">
+                    <span>{data?.start_day}</span>
+                    <span className="mx-1">{data?.start_date}</span>
+                    <span>{data?.start_month}</span>
 
-                  {data?.end_day && (
-                    <span>
-                      <span className="mx-1">-</span>
-                      <span>{data?.end_day}</span>
-                      <span className="mx-1">{data?.end_date}</span>
-                      <span>{data?.end_month}</span>
-                    </span>
-                  )}
-                </h1>
+                    {data?.end_day && (
+                      <span>
+                        <span className="mx-1">-</span>
+                        <span>{data?.end_day}</span>
+                        <span className="mx-1">{data?.end_date}</span>
+                        <span>{data?.end_month}</span>
+                      </span>
+                    )}
+                  </h1>
+                </div>
+                <div className="flex justify-between items-center">
+                  <h3 className="text-sm" style={{ color: data?.type_color }}>
+                    {data?.type}
+                  </h3>
+                  <button>
+                    <KeyboardArrowRightRoundedIcon
+                      fontSize="large"
+                      className="text-gray-500 p-1 rounded-lg bg-gray-100"
+                    />
+                  </button>
+                </div>
               </div>
-              <div className="flex justify-between items-center">
-                <h3 className="text-sm" style={{ color: data?.type_color }}>
-                  {data?.type}
-                </h3>
-                <button>
-                  <KeyboardArrowRightRoundedIcon
-                    fontSize="large"
-                    className="text-gray-500 p-1 rounded-lg bg-gray-100"
-                  />
-                </button>
-              </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
     </div>
   );

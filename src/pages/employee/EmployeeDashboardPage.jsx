@@ -92,7 +92,15 @@ const EmployeeDashboardPage = () => {
 
   useEffect(() => {
     async function apiCall() {
-      const leaveApiResponse = await axios({
+      const UserDetailsResponse = await axios({
+        method: "post",
+        url: process.env.REACT_APP_BASE_LINK + "/userDetails",
+        data: {
+          emp_id: localStorage.getItem("emp_id"),
+        },
+      });
+
+      const leaveStats = await axios({
         method: "post",
         url: process.env.REACT_APP_BASE_LINK + "/leaves",
         data: {
@@ -118,7 +126,8 @@ const EmployeeDashboardPage = () => {
 
       setEmployeeApiData({
         ...employeeApiData,
-        leaveApiResponse: leaveApiResponse?.data?.leave_stats,
+        userDetails: UserDetailsResponse?.data?.emp_details,
+        leaveStats: leaveStats?.data?.leave_stats?.leave_data[0],
         onDeskStats: onDeskApiResponse?.data?.on_desk,
         overtimeStats: overtimeResponse?.data?.overtime,
       });
@@ -134,13 +143,11 @@ const EmployeeDashboardPage = () => {
 
   return (
     <div className="w-[80%] sm:w-[85%] mx-auto py-5 ">
-      <EmployeeHeader />
+      <EmployeeHeader apiData={employeeApiData?.userDetails} />
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 my-10 xl:my-5">
-        <EmployeeStats
-          statsData={employeeApiData?.leaveApiResponse?.leave_data[0]}
-        />
-        <EmployeeStats statsData={employeeApiData?.onDeskStats} />
-        <EmployeeStats statsData={employeeApiData?.overtimeStats} />
+        <EmployeeStats apiData={employeeApiData?.leaveStats} />
+        <EmployeeStats apiData={employeeApiData?.onDeskStats} />
+        <EmployeeStats apiData={employeeApiData?.overtimeStats} />
         <EmployeeClockInOut />
       </div>
       <div className="flex flex-col 2xl:flex-row gap-10 2xl:gap-5 justify-between mb-10">
