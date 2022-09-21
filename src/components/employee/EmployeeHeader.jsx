@@ -1,13 +1,33 @@
 // react
 import React, { useEffect } from "react";
+import { useState } from "react";
+
 // Routing
 import { useNavigate } from "react-router-dom";
 // Media Assets
 import PowerSettingsNewRoundedIcon from "@mui/icons-material/PowerSettingsNewRounded";
+import userInfoAtom from "../../recoil/auth/userInfoAtom";
+import { useRecoilState } from "recoil";
 
 const EmployeeHeader = (props) => {
+  // Global variables
+  const [userInfo, setUserInfo] = useRecoilState(userInfoAtom);
+
   // Local variables
+  const [currentTime, setCurrentTime] = useState();
   const navigate = useNavigate();
+
+  // timer
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date().toLocaleString());
+    }, 1000);
+
+    return () => {
+      clearInterval(timer);
+    };
+  }, []);
+
   return (
     <div>
       <div className=" flex justify-between items-center ">
@@ -53,10 +73,23 @@ const EmployeeHeader = (props) => {
           </h3>
         </div>
 
+        <div>
+          {currentTime?.split(",")?.[1]?.includes("2:06:00 PM")
+            ? "got it"
+            : currentTime?.split(",")?.[1]}
+        </div>
+
+        <div>
+          {/* <h1>emp: {userInfo?.emp_id}</h1>
+          <h1>token: {userInfo?.token}</h1>
+          <h1>userType: {userInfo?.user_type}</h1> */}
+          <button onClick={() => console.log(userInfo)}>click me</button>
+        </div>
         <button
           onClick={() => {
             localStorage.clear();
-            navigate("/");
+            setUserInfo({});
+            navigate("/login");
           }}
         >
           <PowerSettingsNewRoundedIcon

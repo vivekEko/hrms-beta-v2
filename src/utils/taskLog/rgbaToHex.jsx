@@ -4,10 +4,10 @@ function hexToRGB(hex, alpha) {
     b = parseInt(hex.slice(5, 7), 16);
 
   if (alpha) {
-    return console.log("rgba(" + r + ", " + g + ", " + b + ", " + alpha + ")");
+    return "rgba(" + r + ", " + g + ", " + b + ", " + alpha + ")";
   } else {
-    return console.log("rgb(" + r + ", " + g + ", " + b + ")");
+    return "rgb(" + r + ", " + g + ", " + b + ")";
   }
 }
 
-hexToRGB("#00ac69", 0.2);
+export default hexToRGB;

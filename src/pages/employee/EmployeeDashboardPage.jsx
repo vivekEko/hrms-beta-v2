@@ -3,7 +3,6 @@ import React, { useEffect } from "react";
 
 // State Management (Recoil JS)
 import { useRecoilState } from "recoil";
-import userInfoAtom from "../../recoil/auth/userInfoAtom";
 import employeeApiDataAtom from "../../recoil/employeeDashboard/employeeApiDataAtom";
 
 // Api call
@@ -20,78 +19,21 @@ import EmployeeCalendar from "../../components/employee/EmployeeCalendar";
 
 const EmployeeDashboardPage = () => {
   // Global variables
-  const [userInfo, setUserInfo] = useRecoilState(userInfoAtom);
   const [employeeApiData, setEmployeeApiData] =
     useRecoilState(employeeApiDataAtom);
 
-  const stats_data = [
-    // Leaves
-
-    {
-      heading: "Leaves",
-      total_value: 5,
-      unit: "days",
-
-      sub_data: [
-        {
-          sub_heading: "Sick",
-          sub_value: 2,
-          sub_out_of: 6,
-          //   sub_unit: "days",
-        },
-        {
-          sub_heading: "Casual",
-          sub_value: 3,
-          sub_out_of: 6,
-          //   sub_unit: "days",
-        },
-      ],
-    },
-
-    // On desk
-
-    {
-      heading: " On desk",
-      total_value: 45,
-      unit: "days",
-
-      sub_data: [
-        {
-          sub_heading: "WFO",
-          sub_value: 41,
-          sub_unit: "days",
-        },
-        {
-          sub_heading: "WFH",
-          sub_value: 4,
-          sub_unit: "days",
-        },
-      ],
-    },
-
-    // OverTime
-    {
-      heading: " Overtime",
-      total_value: 36,
-      unit: "hrs",
-
-      sub_data: [
-        {
-          sub_heading: "WFO",
-          sub_value: 30,
-          sub_unit: "hrs",
-        },
-        {
-          sub_heading: "WFH",
-          sub_value: 6,
-          sub_unit: "hrs",
-        },
-      ],
-    },
-  ];
-
   useEffect(() => {
     async function apiCall() {
+      const clockInOut = await axios({
+        method: "post",
+        url: process.env.REACT_APP_BASE_LINK + "/clockInOut",
+        data: {
+          emp_id: localStorage.getItem("emp_id"),
+          r_type: "G",
+          t_type: "",
+        },
+      });
+
       const UserDetailsResponse = await axios({
         method: "post",
         url: process.env.REACT_APP_BASE_LINK + "/userDetails",
@@ -124,12 +66,22 @@ const EmployeeDashboardPage = () => {
         },
       });
 
+      const taskLog = await axios({
+        method: "post",
+        url: process.env.REACT_APP_BASE_LINK + "/taskLog",
+        data: {
+          emp_id: localStorage.getItem("emp_id"),
+        },
+      });
+
       setEmployeeApiData({
         ...employeeApiData,
         userDetails: UserDetailsResponse?.data?.emp_details,
         leaveStats: leaveStats?.data?.leave_stats?.leave_data[0],
         onDeskStats: onDeskApiResponse?.data?.on_desk,
         overtimeStats: overtimeResponse?.data?.overtime,
+        clockInOut: clockInOut?.data,
+        taskLog: taskLog?.data?.task_log,
       });
     }
 
@@ -142,7 +94,7 @@ const EmployeeDashboardPage = () => {
   }, [employeeApiData]);
 
   return (
-    <div className="w-[80%] sm:w-[85%] mx-auto py-5 ">
+    <div className="w-[80%] sm:w-[85%] mx-auto py-5  ">
       <EmployeeHeader apiData={employeeApiData?.userDetails} />
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 my-10 xl:my-5">
         <EmployeeStats apiData={employeeApiData?.leaveStats} />
@@ -151,7 +103,7 @@ const EmployeeDashboardPage = () => {
         <EmployeeClockInOut />
       </div>
       <div className="flex flex-col 2xl:flex-row gap-10 2xl:gap-5 justify-between mb-10">
-        <EmployeeTaskLog />
+        <EmployeeTaskLog apiData={employeeApiData?.taskLog} />
 
         <div className="w-full flex flex-col md:flex-row gap-10 2xl:gap-5 ">
           <EmployeeLeaveHistory />

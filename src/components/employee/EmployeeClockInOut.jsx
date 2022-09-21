@@ -1,10 +1,24 @@
 // React
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+
+// State Management (Recoil JS)
+import { useRecoilState } from "recoil";
+import employeeApiDataAtom from "../../recoil/employeeDashboard/employeeApiDataAtom";
 
 const EmployeeClockInOut = () => {
+  // Global variables
+  const [employeeApiData, setEmployeeApiData] =
+    useRecoilState(employeeApiDataAtom);
+
   //   local variables
   const [clockInTime, setClockInTime] = useState();
   const [clockOutTime, setClockOutTime] = useState();
+
+  useEffect(() => {
+    setClockInTime(employeeApiData?.clockInOut?.clock_in);
+    setClockOutTime(employeeApiData?.clockInOut?.clock_out);
+  }, [employeeApiData]);
 
   const month = [
     "January",
@@ -23,19 +37,21 @@ const EmployeeClockInOut = () => {
 
   const d = new Date();
 
-  const clockInOutHandler = () => {
-    let time = new Date().toLocaleString("en-US", {
-      hour: "2-digit",
-      hour12: true,
-      minute: "2-digit",
-      //   second: "numeric",
+  const clockInOutHandler = async () => {
+    const clockInOut = await axios({
+      method: "post",
+      url: process.env.REACT_APP_BASE_LINK + "/clockInOut",
+      data: {
+        emp_id: localStorage.getItem("emp_id"),
+        r_type: "P",
+        t_type: clockInTime ? "CO" : "CI",
+      },
     });
 
-    if (!clockInTime && !clockOutTime) {
-      setClockInTime(time);
-    } else if (clockInTime && !clockOutTime) {
-      setClockOutTime(time);
-    }
+    setEmployeeApiData({
+      ...employeeApiData,
+      clockInOut: clockInOut?.data,
+    });
   };
   return (
     <div className="p-5  rounded-lg bg-white">

@@ -1,8 +1,14 @@
 // Routing
 import { Outlet, Navigate } from "react-router-dom";
 
+// State Management (Recoil Js)
+import { useRecoilState } from "recoil";
+import userInfoAtom from "../../recoil/auth/userInfoAtom";
+
 const ProtectedRoutes = () => {
-  return localStorage.getItem("token") ? <Outlet /> : <Navigate to="/login" />;
+  const [userInfo] = useRecoilState(userInfoAtom);
+
+  return userInfo?.token ? <Outlet /> : <Navigate to="/login" />;
 };
 
 export default ProtectedRoutes;

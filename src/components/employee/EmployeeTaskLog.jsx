@@ -5,7 +5,10 @@ import React from "react";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import BorderColorRoundedIcon from "@mui/icons-material/BorderColorRounded";
 
-const EmployeeTaskLog = () => {
+// helper functions
+import rgbaToHex from "../../utils/taskLog/rgbaToHex";
+
+const EmployeeTaskLog = (props) => {
   const DailyTask = [
     {
       date: "01 Sept 2022",
@@ -276,6 +279,7 @@ const EmployeeTaskLog = () => {
       remarks: "Completed",
     },
   ];
+
   return (
     <div className="p-5 pt-0  rounded-lg    overflow-x-scroll w-full 2xl:w-[98%] relative bg-white">
       <div className="sticky top-0 z-50 ">
@@ -302,7 +306,7 @@ const EmployeeTaskLog = () => {
           <div>Project</div>
           <div>Remarks</div>
         </div>
-        {DailyTask?.map((data, index) => {
+        {props?.apiData?.map((data, index) => {
           return (
             <div
               key={index}
@@ -310,7 +314,7 @@ const EmployeeTaskLog = () => {
             >
               <div className="">{data?.date}</div>
               <div className="">
-                {data?.task_list?.map((tasks, taskIndex) => {
+                {data?.tasks?.split("|")?.map((tasks, taskIndex) => {
                   return (
                     <div
                       key={taskIndex}
@@ -318,38 +322,46 @@ const EmployeeTaskLog = () => {
                     >
                       <div className="w-[10px] flex justify-center items-start translate-y-1">
                         <div
-                          style={{ backgroundColor: tasks?.color }}
+                          style={{
+                            // backgroundColor: projectName?.bgColor,
+                            backgroundColor: data?.color?.split("|")[taskIndex],
+                          }}
                           className="w-[8px] h-[8px] rounded-full"
                         ></div>
                       </div>
 
-                      <h3 className="">{tasks?.task}</h3>
+                      <h3 className="">{tasks}</h3>
                     </div>
                   );
                 })}
               </div>
               <div className="  ">
-                {data?.projects?.map((projectName, projectIndex) => {
-                  return (
-                    <div
-                      key={projectIndex}
-                      className="inline-block mr-2 mb-2  "
-                    >
-                      <h2
-                        style={{
-                          backgroundColor: projectName?.bgColor,
-                          color: projectName?.color,
-                        }}
-                        className={`  p-2 rounded-lg  `}
+                {data?.projects
+                  ?.split("|")
+                  ?.map((projectName, projectIndex) => {
+                    return (
+                      <div
+                        key={projectIndex}
+                        className="inline-block mr-2 mb-2  "
                       >
-                        {projectName?.project}
-                      </h2>
-                    </div>
-                  );
-                })}
+                        <h2
+                          style={{
+                            backgroundColor: rgbaToHex(
+                              data?.color?.split("|")[projectIndex],
+                              0.1
+                            ),
+                            color: data?.color?.split("|")[projectIndex],
+                          }}
+                          className={`  p-2 rounded-lg  `}
+                        >
+                          {projectName}
+                        </h2>
+                      </div>
+                    );
+                  })}
               </div>
 
-              <div className="">{data?.remarks}</div>
+              <div className="">{data?.remark}</div>
             </div>
           );
         })}
