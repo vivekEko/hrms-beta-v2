@@ -35,10 +35,11 @@ function App() {
       {/* Modal overlay */}
 
       {overlayStatus && (
-        <div
-          className="fixed  bg-[#0000007a] inset-0 z-[90] flex justify-center items-center"
-          onClick={() => setOverlayStatus(false)}
-        >
+        <div className="fixed  bg-[#0000007a] inset-0 z-[90]">
+          <div
+            className=" flex justify-center items-center h-full w-full"
+            onClick={() => setOverlayStatus(false)}
+          ></div>
           <Employee_task_overlay_container />
         </div>
       )}
