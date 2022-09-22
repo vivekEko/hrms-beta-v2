@@ -6,12 +6,16 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 // Media Assets
 import PowerSettingsNewRoundedIcon from "@mui/icons-material/PowerSettingsNewRounded";
-import userInfoAtom from "../../recoil/auth/userInfoAtom";
+// State Management (Recoil JS)
 import { useRecoilState } from "recoil";
+import employeeApiDataAtom from "../../recoil/employeeDashboard/employeeApiDataAtom";
+import userInfoAtom from "../../recoil/auth/userInfoAtom";
 
 const EmployeeHeader = (props) => {
   // Global variables
   const [userInfo, setUserInfo] = useRecoilState(userInfoAtom);
+  const [employeeApiData, setEmployeeApiData] =
+    useRecoilState(employeeApiDataAtom);
 
   // Local variables
   const [currentTime, setCurrentTime] = useState();
@@ -20,7 +24,12 @@ const EmployeeHeader = (props) => {
   // timer
   useEffect(() => {
     const timer = setInterval(() => {
-      setCurrentTime(new Date().toLocaleString());
+      setCurrentTime(
+        new Date().toLocaleString({
+          hour: "2-digit",
+          minute: "2-digit",
+        })
+      );
     }, 1000);
 
     return () => {
@@ -73,30 +82,27 @@ const EmployeeHeader = (props) => {
           </h3>
         </div>
 
-        <div>
-          {currentTime?.split(",")?.[1]?.includes("2:06:00 PM")
-            ? "got it"
-            : currentTime?.split(",")?.[1]}
-        </div>
+        <div className="flex items-center gap-5">
+          <div className="text-[#5f66e1] font-semibold text-lg  ">
+            {currentTime?.split(",")?.[1]?.includes("2:06:00 PM")
+              ? "got it"
+              : currentTime?.split(",")?.[1]}
+          </div>
 
-        <div>
-          {/* <h1>emp: {userInfo?.emp_id}</h1>
-          <h1>token: {userInfo?.token}</h1>
-          <h1>userType: {userInfo?.user_type}</h1> */}
-          <button onClick={() => console.log(userInfo)}>click me</button>
+          <button
+            onClick={() => {
+              localStorage.clear();
+              setUserInfo({});
+              setEmployeeApiData({});
+              navigate("/login");
+            }}
+          >
+            <PowerSettingsNewRoundedIcon
+              className="text-[#5f66e1] rotate-90"
+              fontSize="large"
+            />
+          </button>
         </div>
-        <button
-          onClick={() => {
-            localStorage.clear();
-            setUserInfo({});
-            navigate("/login");
-          }}
-        >
-          <PowerSettingsNewRoundedIcon
-            className="text-[#5f66e1] rotate-90"
-            fontSize="large"
-          />
-        </button>
       </div>
     </div>
   );

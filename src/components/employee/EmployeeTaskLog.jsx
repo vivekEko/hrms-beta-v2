@@ -1,5 +1,10 @@
 // react
-import React from "react";
+import React, { useEffect, useState } from "react";
+
+// State Management (Recoil JS)
+import { useRecoilState } from "recoil";
+import overlayStatusAtom from "../../recoil/overlay/overlayStatusAtom";
+import employeeApiDataAtom from "../../recoil/employeeDashboard/employeeApiDataAtom";
 
 // Icons
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
@@ -9,6 +14,18 @@ import BorderColorRoundedIcon from "@mui/icons-material/BorderColorRounded";
 import rgbaToHex from "../../utils/taskLog/rgbaToHex";
 
 const EmployeeTaskLog = (props) => {
+  // Global variable
+  const [overlayStatus, setOverlayStatus] = useRecoilState(overlayStatusAtom);
+  const [employeeApiData, setEmployeeApiData] =
+    useRecoilState(employeeApiDataAtom);
+
+  // Local Variables
+  const [searchInputs, setSearchInputs] = useState("");
+
+  useEffect(() => {
+    console.log("searchInputs:", searchInputs);
+  }, [searchInputs]);
+
   const DailyTask = [
     {
       date: "01 Sept 2022",
@@ -287,9 +304,15 @@ const EmployeeTaskLog = (props) => {
           <h1 className=" text-xl ">Task Log</h1>
           <div className="flex gap-2">
             <button>
+              <input
+                type="text"
+                placeholder="Search..."
+                className={`border-b border-b-[#5f66e1] outline-none w-[150px] text-sm`}
+                onChange={(e) => setSearchInputs(e?.target?.value)}
+              />
               <SearchRoundedIcon fontSize="large" className="text-[#5f66e1] " />
             </button>
-            <button>
+            <button onClick={() => setOverlayStatus(true)}>
               <BorderColorRoundedIcon
                 fontSize="medium"
                 className="text-[#5f66e1]"
@@ -306,65 +329,97 @@ const EmployeeTaskLog = (props) => {
           <div>Project</div>
           <div>Remarks</div>
         </div>
-        {props?.apiData?.map((data, index) => {
-          return (
-            <div
-              key={index}
-              className="grid grid-cols-[120px_1fr_200px_100px] min-w-[600px] py-5 border-b text-sm"
-            >
-              <div className="">{data?.date}</div>
-              <div className="">
-                {data?.tasks?.split("|")?.map((tasks, taskIndex) => {
-                  return (
-                    <div
-                      key={taskIndex}
-                      className="flex gap-2 justify-start items-start mb-5"
-                    >
-                      <div className="w-[10px] flex justify-center items-start translate-y-1">
-                        <div
-                          style={{
-                            // backgroundColor: projectName?.bgColor,
-                            backgroundColor: data?.color?.split("|")[taskIndex],
-                          }}
-                          className="w-[8px] h-[8px] rounded-full"
-                        ></div>
-                      </div>
-
-                      <h3 className="">{tasks}</h3>
-                    </div>
-                  );
-                })}
-              </div>
-              <div className="  ">
-                {data?.projects
-                  ?.split("|")
-                  ?.map((projectName, projectIndex) => {
+        {props?.apiData
+          ?.filter((filtered_value) => {
+            if (searchInputs === "") {
+              return filtered_value;
+            } else if (
+              filtered_value?.tasks
+                ?.toLowerCase()
+                ?.includes(searchInputs?.toLowerCase())
+            ) {
+              return filtered_value;
+            } else if (
+              filtered_value?.projects
+                ?.toLowerCase()
+                ?.includes(searchInputs?.toLowerCase())
+            ) {
+              return filtered_value;
+            } else if (
+              filtered_value?.remark
+                ?.toLowerCase()
+                ?.includes(searchInputs?.toLowerCase())
+            ) {
+              return filtered_value;
+            } else if (
+              filtered_value?.date
+                ?.toLowerCase()
+                ?.includes(searchInputs?.toLowerCase())
+            ) {
+              return filtered_value;
+            }
+          })
+          .map((data, index) => {
+            return (
+              <div
+                key={index}
+                className="grid grid-cols-[120px_1fr_200px_100px] min-w-[600px] py-5 border-b text-sm"
+              >
+                <div className="">{data?.date}</div>
+                <div className="">
+                  {data?.tasks?.split("|")?.map((tasks, taskIndex) => {
                     return (
                       <div
-                        key={projectIndex}
-                        className="inline-block mr-2 mb-2  "
+                        key={taskIndex}
+                        className="flex gap-2 justify-start items-start mb-5"
                       >
-                        <h2
-                          style={{
-                            backgroundColor: rgbaToHex(
-                              data?.color?.split("|")[projectIndex],
-                              0.1
-                            ),
-                            color: data?.color?.split("|")[projectIndex],
-                          }}
-                          className={`  p-2 rounded-lg  `}
-                        >
-                          {projectName}
-                        </h2>
+                        <div className="w-[10px] flex justify-center items-start translate-y-1">
+                          <div
+                            style={{
+                              // backgroundColor: projectName?.bgColor,
+                              backgroundColor:
+                                data?.color?.split("|")[taskIndex],
+                            }}
+                            className="w-[8px] h-[8px] rounded-full"
+                          ></div>
+                        </div>
+
+                        <h3 className="">{tasks}</h3>
                       </div>
                     );
                   })}
-              </div>
+                </div>
 
-              <div className="">{data?.remark}</div>
-            </div>
-          );
-        })}
+                <div className={` ${data?.projects ? "" : "invisible"} `}>
+                  {data?.projects
+                    ?.split("|")
+                    ?.map((projectName, projectIndex) => {
+                      return (
+                        <div
+                          key={projectIndex}
+                          className="inline-block mr-2 mb-2  "
+                        >
+                          <h2
+                            style={{
+                              backgroundColor: rgbaToHex(
+                                data?.color?.split("|")[projectIndex],
+                                0.1
+                              ),
+                              color: data?.color?.split("|")[projectIndex],
+                            }}
+                            className={`  p-2 rounded-lg  `}
+                          >
+                            {projectName}
+                          </h2>
+                        </div>
+                      );
+                    })}
+                </div>
+
+                <div className="">{data?.remark}</div>
+              </div>
+            );
+          })}
       </div>
     </div>
   );

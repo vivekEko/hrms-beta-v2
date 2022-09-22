@@ -16,7 +16,7 @@ import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   // Global variables
-  const [userCredentials, setUserCredentials] = useRecoilState(userAtom);
+  // const [userCredentials, setUserCredentials] = useRecoilState(userAtom);
 
   // Local variables
   const [showPassword, setShowPassword] = useState(false);
@@ -25,28 +25,28 @@ const Login = () => {
   const navigate = useNavigate();
 
   //   Login functionality
-  useEffect(() => {
-    if (
-      emailRef?.current?.value?.length > 0 &&
-      passwordRef?.current?.value?.length > 0
-    ) {
-      axios({
-        method: "post",
-        url: process.env.REACT_APP_BASE_LINK + "/login",
-        data: userCredentials,
-      })
-        .then(function (response) {
-          localStorage.setItem("status", response?.data?.status);
-          localStorage.setItem("user_type", response?.data?.user_type);
-          localStorage.setItem("token", response?.data?.token);
-          localStorage.setItem("emp_id", response?.data?.emp_id);
-          navigate("/");
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
-    }
-  }, [userCredentials]);
+  // useEffect(() => {
+  //   if (
+  //     emailRef?.current?.value?.length > 0 &&
+  //     passwordRef?.current?.value?.length > 0
+  //   ) {
+  //     axios({
+  //       method: "post",
+  //       url: process.env.REACT_APP_BASE_LINK + "/login",
+  //       data: userCredentials,
+  //     })
+  //       .then(function (response) {
+  //         localStorage.setItem("status", response?.data?.status);
+  //         localStorage.setItem("user_type", response?.data?.user_type);
+  //         localStorage.setItem("token", response?.data?.token);
+  //         localStorage.setItem("emp_id", response?.data?.emp_id);
+  //         navigate("/");
+  //       })
+  //       .catch(function (error) {
+  //         console.log(error);
+  //       });
+  //   }
+  // }, [userCredentials]);
 
   return (
     <div className="flex justify-center items-center h-screen bg-gradient-to-tr from-[#e5e5f8] to-[#b8bcff]">
@@ -60,12 +60,31 @@ const Login = () => {
             // Preventing default refresh
             e.preventDefault();
             // Storing user credentials
-            setUserCredentials({
+            const userCredentials = {
               username: emailRef.current.value,
               password: passwordRef.current.value,
-            });
-            // Clearling input fileds after form submission
-            // e.target.reset();
+            };
+
+            if (
+              emailRef?.current?.value?.length > 0 &&
+              passwordRef?.current?.value?.length > 0
+            ) {
+              axios({
+                method: "post",
+                url: process.env.REACT_APP_BASE_LINK + "/login",
+                data: userCredentials,
+              })
+                .then(function (response) {
+                  localStorage.setItem("status", response?.data?.status);
+                  localStorage.setItem("user_type", response?.data?.user_type);
+                  localStorage.setItem("token", response?.data?.token);
+                  localStorage.setItem("emp_id", response?.data?.emp_id);
+                  navigate("/");
+                })
+                .catch(function (error) {
+                  console.log(error);
+                });
+            }
           }}
           className="mt-10"
         >

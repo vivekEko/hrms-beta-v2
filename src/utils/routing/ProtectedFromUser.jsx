@@ -1,12 +1,12 @@
 // Routing
 import { Outlet, Navigate } from "react-router-dom";
 
-const ProtectedRoutes = () => {
+const ProtectedFromUser = () => {
   return localStorage.getItem("user_type")?.includes("U" || "S") ? (
-    <Outlet />
+    <Navigate to="/" />
   ) : (
-    <Navigate to="/login" />
+    <Outlet />
   );
 };
 
-export default ProtectedRoutes;
+export default ProtectedFromUser;

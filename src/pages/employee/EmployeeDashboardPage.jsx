@@ -84,8 +84,9 @@ const EmployeeDashboardPage = () => {
         taskLog: taskLog?.data?.task_log,
       });
     }
-
-    apiCall();
+    if (localStorage.getItem("user_type")?.includes("U")) {
+      apiCall();
+    }
   }, []);
 
   useEffect(() => {
