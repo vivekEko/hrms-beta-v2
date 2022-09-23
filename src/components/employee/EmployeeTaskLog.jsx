@@ -5,6 +5,10 @@ import React, { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import overlayStatusAtom from "../../recoil/overlay/overlayStatusAtom";
 import employeeApiDataAtom from "../../recoil/employeeDashboard/employeeApiDataAtom";
+import employeeOverlayCalendarSelectedDate from "../../recoil/employeePostRequests/employeeOverlayCalendar/employeeOverlayCalendarSelectedDate";
+
+// apiCall
+import axios from "axios";
 
 // Icons
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
@@ -18,6 +22,9 @@ const EmployeeTaskLog = (props) => {
   const [overlayStatus, setOverlayStatus] = useRecoilState(overlayStatusAtom);
   const [employeeApiData, setEmployeeApiData] =
     useRecoilState(employeeApiDataAtom);
+  const [currentSelectedDate, setCurrentSelectedDate] = useRecoilState(
+    employeeOverlayCalendarSelectedDate
+  );
 
   // Local Variables
   const [searchInputs, setSearchInputs] = useState("");
@@ -297,6 +304,33 @@ const EmployeeTaskLog = (props) => {
     },
   ];
 
+  const callTasklogUpdationApi = () => {
+    setOverlayStatus(true);
+
+    async function apiCall() {
+      const tasklogUpdation = await axios({
+        method: "post",
+        url: process.env.REACT_APP_BASE_LINK + "/taskLogUpdation",
+        data: {
+          emp_id: localStorage.getItem("emp_id"),
+          r_type: "G",
+          date:
+            currentSelectedDate?.date +
+            "-" +
+            currentSelectedDate?.month +
+            "-" +
+            currentSelectedDate?.year,
+        },
+      });
+
+      setEmployeeApiData({
+        ...employeeApiData,
+        taskLogUpdation: tasklogUpdation?.data,
+      });
+    }
+    apiCall();
+  };
+
   return (
     <div className="p-5 pt-0  rounded-lg    overflow-x-scroll w-full 2xl:w-[98%] relative bg-white">
       <div className="sticky top-0 z-50 ">
@@ -312,7 +346,7 @@ const EmployeeTaskLog = (props) => {
               />
               <SearchRoundedIcon fontSize="large" className="text-[#5f66e1] " />
             </button>
-            <button onClick={() => setOverlayStatus(true)}>
+            <button onClick={callTasklogUpdationApi}>
               <BorderColorRoundedIcon
                 fontSize="medium"
                 className="text-[#5f66e1]"
