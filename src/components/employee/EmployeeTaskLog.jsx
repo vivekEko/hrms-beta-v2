@@ -307,28 +307,28 @@ const EmployeeTaskLog = (props) => {
   const callTasklogUpdationApi = () => {
     setOverlayStatus(true);
 
-    async function apiCall() {
-      const tasklogUpdation = await axios({
-        method: "post",
-        url: process.env.REACT_APP_BASE_LINK + "/taskLogUpdation",
-        data: {
-          emp_id: localStorage.getItem("emp_id"),
-          r_type: "G",
-          date:
-            currentSelectedDate?.date +
-            "-" +
-            currentSelectedDate?.month +
-            "-" +
-            currentSelectedDate?.year,
-        },
-      });
+    // async function apiCall() {
+    //   const tasklogUpdation = await axios({
+    //     method: "post",
+    //     url: process.env.REACT_APP_BASE_LINK + "/taskLogUpdation",
+    //     data: {
+    //       emp_id: localStorage.getItem("emp_id"),
+    //       r_type: "G",
+    //       date:
+    //         currentSelectedDate?.date +
+    //         "-" +
+    //         currentSelectedDate?.month +
+    //         "-" +
+    //         currentSelectedDate?.year,
+    //     },
+    //   });
 
-      setEmployeeApiData({
-        ...employeeApiData,
-        taskLogUpdation: tasklogUpdation?.data,
-      });
-    }
-    apiCall();
+    //   setEmployeeApiData({
+    //     ...employeeApiData,
+    //     taskLogUpdation: tasklogUpdation?.data,
+    //   });
+    // }
+    // apiCall();
   };
 
   return (
@@ -347,6 +347,14 @@ const EmployeeTaskLog = (props) => {
               <SearchRoundedIcon fontSize="large" className="text-[#5f66e1] " />
             </button>
             <button onClick={callTasklogUpdationApi}>
+              1
+              <BorderColorRoundedIcon
+                fontSize="medium"
+                className="text-[#5f66e1]"
+              />
+            </button>
+            <button onClick={callTasklogUpdationApi}>
+              2
               <BorderColorRoundedIcon
                 fontSize="medium"
                 className="text-[#5f66e1]"

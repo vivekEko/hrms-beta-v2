@@ -16,6 +16,7 @@ import EmployeeDashboardPage from "./pages/employee/EmployeeDashboardPage";
 import Login from "./pages/auth/Login";
 import ProtectedRoutes from "./utils/routing/ProtectedRoutes";
 import ProtectedFromUser from "./utils/routing/ProtectedFromUser";
+import Employee_Task_n_Projects_edit from "./components/employee_overlays/employee_task_overlays/Employee_Task_n_Projects_edit";
 
 function App() {
   // Global variables
@@ -40,7 +41,8 @@ function App() {
             className=" flex justify-center items-center h-full w-full"
             onClick={() => setOverlayStatus(false)}
           ></div>
-          <Employee_task_overlay_container />
+          {/* <Employee_task_overlay_container /> */}
+          <Employee_Task_n_Projects_edit />
         </div>
       )}
 
