@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 
 // State Management (Recoil JS)
 import { useRecoilState } from "recoil";
-import overlayStatusAtom from "../../recoil/overlay/overlayStatusAtom";
+import overlayStatusAtom from "../../recoil/employee_overlay/overlayStatusAtom";
 import employeeApiDataAtom from "../../recoil/employeeDashboard/employeeApiDataAtom";
 import employeeOverlayCalendarSelectedDate from "../../recoil/employeePostRequests/employeeOverlayCalendar/employeeOverlayCalendarSelectedDate";
 
@@ -304,24 +304,13 @@ const EmployeeTaskLog = (props) => {
     },
   ];
 
+  useEffect(() => {
+    console.log("overlayStatus:");
+    console.log(overlayStatus);
+  }, [overlayStatus]);
+
   const callTasklogUpdationApi = () => {
     setOverlayStatus(true);
-
-    // async function apiCall() {
-    //   const tasklogUpdation = await axios({
-    //     method: "post",
-    //     url: process.env.REACT_APP_BASE_LINK + "/taskLogUpdation",
-    //     data: {
-    //       emp_id: localStorage.getItem("emp_id"),
-    //       r_type: "G",
-    //       date:
-    //         currentSelectedDate?.date +
-    //         "-" +
-    //         currentSelectedDate?.month +
-    //         "-" +
-    //         currentSelectedDate?.year,
-    //     },
-    //   });
 
     //   setEmployeeApiData({
     //     ...employeeApiData,
@@ -346,15 +335,8 @@ const EmployeeTaskLog = (props) => {
               />
               <SearchRoundedIcon fontSize="large" className="text-[#5f66e1] " />
             </button>
+
             <button onClick={callTasklogUpdationApi}>
-              1
-              <BorderColorRoundedIcon
-                fontSize="medium"
-                className="text-[#5f66e1]"
-              />
-            </button>
-            <button onClick={callTasklogUpdationApi}>
-              2
               <BorderColorRoundedIcon
                 fontSize="medium"
                 className="text-[#5f66e1]"

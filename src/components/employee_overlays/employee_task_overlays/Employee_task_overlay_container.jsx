@@ -7,7 +7,7 @@ import AddCircleOutlineRoundedIcon from "@mui/icons-material/AddCircleOutlineRou
 import { monthList } from "../../../utils/calendar/day_and_month_list";
 
 // Component
-import OverlayCalendar from "../overlay_calendar/OverlayCalendar";
+import OverlayCalendar from "../overlay_calendar/OverlayEmployeeTaskCalendar";
 
 // State management (Recoil JS)
 import { useRecoilState } from "recoil";
@@ -121,8 +121,6 @@ const Employee_task_overlay_container = () => {
           task_array: apiData?.task_array,
         },
       });
-      console.log("task update response:");
-      console.log(tasklogUpdation?.data);
     }
     apiCall();
   };

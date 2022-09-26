@@ -89,11 +89,6 @@ const EmployeeDashboardPage = () => {
     }
   }, []);
 
-  useEffect(() => {
-    console.log("employeeApiData:");
-    console.log(employeeApiData);
-  }, [employeeApiData]);
-
   return (
     <div className="w-[80%] sm:w-[85%] mx-auto py-5  ">
       <EmployeeHeader apiData={employeeApiData?.userDetails} />

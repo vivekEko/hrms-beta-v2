@@ -7,7 +7,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 // State menagement(Recoil JS)
 import { useRecoilState } from "recoil";
 import userInfoAtom from "./recoil/auth/userInfoAtom";
-import overlayStatusAtom from "./recoil/overlay/overlayStatusAtom";
+import overlayStatusAtom from "./recoil/employee_overlay/overlayStatusAtom";
 import Employee_task_overlay_container from "./components/employee_overlays/employee_task_overlays/Employee_task_overlay_container";
 
 // Components and pages
@@ -36,13 +36,14 @@ function App() {
       {/* Modal overlay */}
 
       {overlayStatus && (
-        <div className="fixed  bg-[#0000007a] inset-0 z-[90]">
-          <div
-            className=" flex justify-center items-center h-full w-full"
-            onClick={() => setOverlayStatus(false)}
-          ></div>
+        <div
+          className="fixed  bg-[#0000007a] inset-0 z-[90] flex justify-center items-center"
+          onClick={() => setOverlayStatus(false)}
+        >
+          <div className="  " onClick={(e) => e.stopPropagation()}>
+            <Employee_Task_n_Projects_edit />
+          </div>
           {/* <Employee_task_overlay_container /> */}
-          <Employee_Task_n_Projects_edit />
         </div>
       )}
 
