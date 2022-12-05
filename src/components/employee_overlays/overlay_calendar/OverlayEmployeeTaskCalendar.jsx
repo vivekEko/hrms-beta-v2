@@ -106,7 +106,7 @@ const OverlayEmployeeTaskCalendar = () => {
   const ref = useDetectClickOutside({ onTriggered: closeCalendar });
 
   return (
-    <div ref={ref} className="absolute shadow-2xl rounded-xl w-[300px]">
+    <div ref={ref} className="absolute shadow-2xl rounded-xl w-[300px] ">
       <div className=" w-full p-5  bg-white  rounded-lg">
         <div className="flex justify-between  items-center  gap-1 text-xl">
           <h1 className=" relative">
@@ -222,13 +222,14 @@ const OverlayEmployeeTaskCalendar = () => {
                   : ""
               }
               w-full text-center p-1 rounded-lg cursor-pointer  transition min-w-[25px]`}
-                onClick={() =>
+                onClick={() => {
+                  setShowCalendar(false);
                   setCurrentSelectedDate({
                     date: data?.date,
                     month: data?.month,
                     year: data?.year,
-                  })
-                }
+                  });
+                }}
               >
                 <h2 className=" text-sm">{data?.date}</h2>
               </div>

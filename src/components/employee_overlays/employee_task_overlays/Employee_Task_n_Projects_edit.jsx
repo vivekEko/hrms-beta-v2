@@ -41,6 +41,22 @@ const Employee_Task_n_Projects_edit = () => {
     "#" + Math.floor(Math.random() * 16777215).toString(16)
   );
   const [currentProjectsLocal, setCurrentProjectsLocal] = useState();
+  const [taskArrayToSend, setTaskArrayToSend] = useState([]);
+  const [selectedProject, setSelectedProject] = useState();
+  const [projectStatusList] = useState([
+    {
+      statusShortName: "I",
+      statusLongName: "In Progress",
+    },
+    {
+      statusShortName: "C",
+      statusLongName: "Completed",
+    },
+    {
+      statusShortName: "O",
+      statusLongName: "On Hold",
+    },
+  ]);
   const projectNameRef = useRef();
   const projectColorRef = useRef();
 
@@ -52,6 +68,8 @@ const Employee_Task_n_Projects_edit = () => {
   useEffect(() => {
     setApiData(employeeApiData?.taskLogUpdation);
     setCurrentProjectsLocal(employeeApiData?.currentProjects);
+    console.log("employeeApiData:");
+    console.log(employeeApiData);
   }, [employeeApiData]);
 
   //   Mock api data
@@ -103,15 +121,29 @@ const Employee_Task_n_Projects_edit = () => {
   ];
 
   useEffect(() => {
-    async function projectGetCall() {
-      const projectGet = await axios({
-        method: "post",
-        url: process.env.REACT_APP_BASE_LINK + "/projectGet",
-        data: {
-          emp_id: localStorage.getItem("emp_id"),
-        },
-      });
+    if (activeTab === "projects") {
+      async function projectGetCall() {
+        const projectGet = await axios({
+          method: "post",
+          url: process.env.REACT_APP_BASE_LINK + "/projectGet",
+          data: {
+            emp_id: localStorage.getItem("emp_id"),
+          },
+        });
 
+        setEmployeeApiData({
+          ...employeeApiData,
+          currentProjects: projectGet?.data?.project_list,
+        });
+      }
+
+      projectGetCall();
+    }
+  }, [activeTab]);
+
+  // Get tasks on date change
+  useEffect(() => {
+    async function getTasks() {
       const tasklogUpdation = await axios({
         method: "post",
         url: process.env.REACT_APP_BASE_LINK + "/taskLogUpdation",
@@ -129,23 +161,16 @@ const Employee_Task_n_Projects_edit = () => {
 
       setEmployeeApiData({
         ...employeeApiData,
-        currentProjects: projectGet?.data?.project_list,
         taskLogUpdation: tasklogUpdation?.data,
       });
     }
 
-    projectGetCall();
-  }, []);
+    getTasks();
+  }, [currentSelectedDate]);
 
   useEffect(() => {
-    console.log("apiData");
-    console.log(apiData);
+    setTaskArrayToSend(apiData?.task_array);
   }, [apiData]);
-
-  useEffect(() => {
-    console.log("employeeApiData:");
-    console.log(employeeApiData);
-  }, [employeeApiData]);
 
   const newProjectSubmit = (e) => {
     setRandomColor("#" + Math.floor(Math.random() * 16777215).toString(16));
@@ -161,13 +186,53 @@ const Employee_Task_n_Projects_edit = () => {
           emp_id: localStorage.getItem("emp_id"),
           project_name: projectName,
           project_color: projectColor,
-          // project_list: currentProjectsLocal,
+        },
+      });
+    }
+    apiCall();
+  };
+
+  // Task update call
+  const onUpdateHandlerTasks = () => {
+    async function apiCall() {
+      const tasklogUpdation = await axios({
+        method: "post",
+        url: process.env.REACT_APP_BASE_LINK + "/taskLogUpdation",
+        data: {
+          emp_id: localStorage.getItem("emp_id"),
+          r_type: "P",
+          date:
+            currentSelectedDate?.date +
+            "-" +
+            (currentSelectedDate?.month + 1) +
+            "-" +
+            currentSelectedDate?.year,
+
+          remark: apiData?.remark,
+          task_array: taskArrayToSend,
+        },
+      });
+    }
+
+    apiCall();
+  };
+
+  // Project Update
+  const onProjectUpdateHandler = () => {
+    async function apiCall() {
+      const projectupdation = await axios({
+        method: "post",
+        url: process.env.REACT_APP_BASE_LINK + "/projectUpdate",
+        data: {
+          emp_id: localStorage?.getItem("emp_id"),
+          project_array: currentProjectsLocal,
         },
       });
 
-      console.log("project Add response:");
-      console.log(projectAdd?.data);
+      console.log("projectupdation: ");
+      console.log(projectupdation?.data);
     }
+
     apiCall();
   };
 
@@ -208,13 +273,13 @@ const Employee_Task_n_Projects_edit = () => {
                 onClick={() => setShowCalendar(!showCalendar)}
               >
                 <span>
-                  {/* {currentSelectedDate?.date +
+                  {currentSelectedDate?.date +
                     " " +
                     monthList[currentSelectedDate?.month]?.shortName +
                     " " +
-                    currentSelectedDate?.year} */}
+                    currentSelectedDate?.year}
 
-                  {employeeApiData?.taskLogUpdation?.date}
+                  {/* {employeeApiData?.taskLogUpdation?.date} */}
                 </span>
 
                 <CalendarMonthRoundedIcon className="text-gray-400" />
@@ -245,31 +310,50 @@ const Employee_Task_n_Projects_edit = () => {
           </div>
 
           <div className="h-[220px]  overflow-y-scroll">
-            {apiData?.task_array?.map((data, index) => {
-              return (
-                <div
-                  key={data?.id}
-                  className="flex justify-between items-start gap-5  px-5 my-3"
-                >
-                  <textarea
-                    defaultValue={data?.task}
-                    id=""
-                    cols="20"
-                    rows="3"
-                    className="flex-1 border outline-[#5f66e1] rounded-lg "
-                  ></textarea>
-                  <h1 className="w-[180px] flex justify-between items-center ">
-                    <span> {data?.project}</span>
-                  </h1>
-                </div>
-              );
-            })}
+            {employeeApiData?.taskLogUpdation?.task_array?.map(
+              (data, index) => {
+                return (
+                  <div
+                    key={data?.id}
+                    className="flex justify-between items-start gap-5  px-5 my-3"
+                  >
+                    <textarea
+                      placeholder={
+                        data?.task === "add your tasks" ? data?.task : ""
+                      }
+                      defaultValue={
+                        data?.task === "add your tasks" ? "" : data?.task
+                      }
+                      cols="20"
+                      rows="3"
+                      onChange={(e) =>
+                        setTaskArrayToSend(
+                          taskArrayToSend?.map((obj) => {
+                            // 👇️ if id equals 2, update country property
+                            if (obj.id === data?.id) {
+                              return { ...obj, task: e?.target?.value };
+                            }
+
+                            // 👇️ otherwise return object as is
+                            return obj;
+                          })
+                        )
+                      }
+                      className="flex-1 border outline-[#5f66e1] rounded-lg "
+                    ></textarea>
+                    <h1 className="w-[180px] flex justify-between items-center ">
+                      <span> {data?.project}</span>
+                    </h1>
+                  </div>
+                );
+              }
+            )}
           </div>
 
           <div className="flex justify-end mt-5 px-5">
             <button
               className=" p-3 rounded-xl text-center w-[100px] bg-[#5f66e1] text-white active:scale-95 transition"
-              //   onClick={onSaveHandler}
+              onClick={onUpdateHandlerTasks}
             >
               Save
             </button>
@@ -308,7 +392,6 @@ const Employee_Task_n_Projects_edit = () => {
               </button>
             </div>
           </div>
-
           <div className="flex justify-between items-center gap-5 px-5 text-gray-500 text-sm mt-10">
             <div className="flex-1 flex justify-between items-center gap-2">
               <h1 className=" flex-1">Project name</h1>
@@ -317,7 +400,7 @@ const Employee_Task_n_Projects_edit = () => {
             <h1 className="w-[140px] ">Status</h1>
           </div>
 
-          {currentProjectsLocal?.map((data, index) => {
+          {employeeApiData?.currentProjects?.map((data, index) => {
             return (
               <div
                 key={data?.id}
@@ -327,7 +410,17 @@ const Employee_Task_n_Projects_edit = () => {
                   <input
                     type="text"
                     defaultValue={data?.project_name}
-                    onChange={() => setCurrentProjectsLocal()}
+                    onChange={(e) =>
+                      setCurrentProjectsLocal(
+                        currentProjectsLocal?.map((obj) => {
+                          if (obj.id === data?.id) {
+                            return { ...obj, project_name: e?.target?.value };
+                          }
+
+                          return obj;
+                        })
+                      )
+                    }
                     className=" p-2 border outline-[#5f66e1] rounded-lg flex-1"
                   ></input>
                   <div className=" w-[50px] flex justify-center items-center">
@@ -337,19 +430,76 @@ const Employee_Task_n_Projects_edit = () => {
                         data?.project_color ? data?.project_color : randomColor
                       }
                       className="mx-auto "
+                      onChange={(e) =>
+                        setCurrentProjectsLocal(
+                          currentProjectsLocal.map((obj) => {
+                            if (obj.id === data?.id) {
+                              return {
+                                ...obj,
+                                project_color: e?.target?.value,
+                              };
+                            }
+
+                            return obj;
+                          })
+                        )
+                      }
                     />
                   </div>
                 </div>
-                <h1 className="w-[140px] flex justify-between items-center ">
-                  <span>{data?.status}</span>
-                  <span>
-                    <KeyboardArrowDownRoundedIcon className="text-gray-400" />
-                  </span>
-                </h1>
+
+                {/* Status */}
+                <div className="relative">
+                  <h1
+                    className="w-[140px] flex justify-between items-center cursor-pointer"
+                    onClick={() => {
+                      if (selectedProject === data?.project_name) {
+                        setSelectedProject(null);
+                      } else {
+                        setSelectedProject(data?.project_name);
+                      }
+                    }}
+                  >
+                    <span className="z-50">{data?.status}</span>
+                    <span>
+                      <KeyboardArrowDownRoundedIcon className="text-gray-400" />
+                    </span>
+                  </h1>
+                  {selectedProject === data?.project_name && (
+                    <div className="absolute right-0 left-0 top-[100%] rounded-xl  py-2 bg-[#f8f8f8] shadow-2xl z-[999]">
+                      <div className=" ">
+                        {projectStatusList?.map((projectData, projectID) => {
+                          return (
+                            <div className="">
+                              <h1
+                                className="p-2 cursor-pointer text-sm text-gray-700 hover:text-black transition"
+                                onClick={(e) =>
+                                  setCurrentProjectsLocal(
+                                    currentProjectsLocal.map((obj) => {
+                                      if (obj.id === data?.id) {
+                                        return {
+                                          ...obj,
+                                          status: projectData?.statusShortName,
+                                        };
+                                      }
+
+                                      return obj;
+                                    })
+                                  )
+                                }
+                              >
+                                {projectData?.statusLongName}
+                              </h1>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
             );
           })}
-
           {/* <div className="flex  justify-center items-center w-full  text-sm text-gray-300 py-5">
             <div
               onClick={() =>
@@ -372,12 +522,11 @@ const Employee_Task_n_Projects_edit = () => {
               Add Projects{" "}
             </div>
           </div> */}
-
           <div className="absolute bottom-0 left-0 right-0 rounded-xl  ">
             <div className="flex justify-end items-center py-5 bg-white px-5 rounded-xl ">
               <button
                 className=" p-3 rounded-xl text-center w-[100px] bg-[#5f66e1] text-white active:scale-95 transition  "
-                onClick={newProjectSubmit}
+                onClick={onProjectUpdateHandler}
               >
                 Save
               </button>

@@ -29,10 +29,6 @@ const EmployeeTaskLog = (props) => {
   // Local Variables
   const [searchInputs, setSearchInputs] = useState("");
 
-  useEffect(() => {
-    console.log("searchInputs:", searchInputs);
-  }, [searchInputs]);
-
   const DailyTask = [
     {
       date: "01 Sept 2022",
@@ -304,20 +300,8 @@ const EmployeeTaskLog = (props) => {
     },
   ];
 
-  useEffect(() => {
-    console.log("overlayStatus:");
-    console.log(overlayStatus);
-  }, [overlayStatus]);
-
   const callTasklogUpdationApi = () => {
     setOverlayStatus(true);
-
-    //   setEmployeeApiData({
-    //     ...employeeApiData,
-    //     taskLogUpdation: tasklogUpdation?.data,
-    //   });
-    // }
-    // apiCall();
   };
 
   return (
@@ -391,7 +375,7 @@ const EmployeeTaskLog = (props) => {
               >
                 <div className="">{data?.date}</div>
                 <div className="">
-                  {data?.tasks?.split("|")?.map((tasks, taskIndex) => {
+                  {data?.task_data?.map((tasks, taskIndex) => {
                     return (
                       <div
                         key={taskIndex}
@@ -401,44 +385,54 @@ const EmployeeTaskLog = (props) => {
                           <div
                             style={{
                               // backgroundColor: projectName?.bgColor,
-                              backgroundColor:
-                                data?.color?.split("|")[taskIndex],
+                              backgroundColor: tasks?.color,
                             }}
                             className="w-[8px] h-[8px] rounded-full"
                           ></div>
                         </div>
 
-                        <h3 className="">{tasks}</h3>
+                        <h3 className="">{tasks?.tasks}</h3>
                       </div>
                     );
                   })}
                 </div>
 
-                <div className={` ${data?.projects ? "" : "invisible"} `}>
-                  {data?.projects
-                    ?.split("|")
-                    ?.map((projectName, projectIndex) => {
-                      return (
-                        <div
-                          key={projectIndex}
-                          className="inline-block mr-2 mb-2  "
-                        >
+                <div className="flex gap-2 flex-wrap">
+                  {data?.task_data?.map((tasks, taskIndex) => {
+                    return (
+                      <div
+                        key={taskIndex}
+                        className={` ${tasks?.projects ? "" : "invisible"} `}
+                      >
+                        <div className="inline-block mr-2 mb-2  ">
                           <h2
                             style={{
-                              backgroundColor: rgbaToHex(
-                                data?.color?.split("|")[projectIndex],
-                                0.1
-                              ),
-                              color: data?.color?.split("|")[projectIndex],
+                              backgroundColor: rgbaToHex(tasks?.color, 0.1),
+                              color: tasks?.color,
                             }}
-                            className={`  p-2 rounded-lg  `}
+                            className={`  p-2 rounded-lg text-xs `}
                           >
-                            {projectName}
+                            {tasks?.projects}
                           </h2>
                         </div>
-                      );
-                    })}
+                      </div>
+                    );
+                  })}
                 </div>
+
+                {/* <div className={` ${tasks?.projects ? "" : "invisible"} `}>
+                  <div className="inline-block mr-2 mb-2  ">
+                    <h2
+                      style={{
+                        backgroundColor: rgbaToHex(tasks?.color, 0.1),
+                        color: tasks?.color,
+                      }}
+                      className={`  p-2 rounded-lg  `}
+                    >
+                      {tasks?.projects}
+                    </h2>
+                  </div>
+                </div> */}
 
                 <div className="">{data?.remark}</div>
               </div>
